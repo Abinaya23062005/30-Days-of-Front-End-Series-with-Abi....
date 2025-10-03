@@ -1,0 +1,177 @@
+index.html
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Countdown</title>
+  </head>
+  <body>
+    <div id="year" class="year"></div>
+    <h1>New Year Countdown</h1>
+    <div id="countdown" class="countdown">
+      <div class="time">
+        <h2 id="days">00</h2>
+        <p><small>days</small></p>
+      </div>
+      <div class="time">
+        <h2 id="hours">00</h2>
+        <p><small>hours</small></p>
+      </div>
+      <div class="time">
+        <h2 id="minutes">00</h2>
+        <p><small>minutes</small></p>
+      </div>
+      <div class="time">
+        <h2 id="seconds">00</h2>
+        <p><small>seconds</small></p>
+      </div>
+    </div>
+    <img
+      src="https://github.com/bradtraversy/vanillawebprojects/blob/master/new-year-countdown/img/spinner.gif?raw=true"
+      alt="Loading..."
+      id="loading"
+      class="loading"
+    />
+    <script src="script.js"></script>
+  </body>
+</html>
+
+style.css
+
+
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #0b3747
+    url("https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1350&q=80")
+    no-repeat center center/cover;
+  color: rgba(255, 255, 255, 0.87);
+  font-family: "PT Sans Narrow", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+body::after {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body * {
+  z-index: 1;
+}
+
+h1 {
+  font-size: 2.75rem;
+  margin: -100px 0 30px;
+}
+
+.year {
+  font-size: 12rem;
+  z-index: -1;
+  opacity: 0.2;
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.countdown {
+  display: none;
+  transform: scale(2);
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem;
+}
+
+.time h2 {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.time p {
+  font-size: 0.75rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  h1 {
+    font-size: 3.5rem;
+  }
+  .time {
+    margin: 1rem;
+  }
+  .time h2 {
+    font-size: 1.5rem;
+    margin: 0 0 5px;
+  }
+  .time p {
+    font-size: 1rem;
+  }
+}  
+
+script.js
+
+
+
+const days = document.getElementById("days");
+const hours = document.getElementById("hours");
+const minutes = document.getElementById("minutes");
+const seconds = document.getElementById("seconds");
+const countdown = document.getElementById("countdown");
+const year = document.getElementById("year");
+const loading = document.getElementById("loading");
+
+const nextYear = new Date().getFullYear() + 1;
+const newYearTime = new Date(`January 01 ${nextYear} 00:00:00`);
+
+function formatTime(unit) {
+  return unit < 10 ? "0" + unit : unit;
+}
+
+function updateCountdown() {
+  const currentTime = new Date();
+  const difference = newYearTime - currentTime;
+  const currentDays = Math.floor(difference / 1000 / 60 / 60 / 24);
+  const currentHours = Math.floor(difference / 1000 / 60 / 60) % 24;
+  const currentMinutes = Math.floor(difference / 1000 / 60) % 60;
+  const currentSeconds = Math.floor(difference / 1000) % 60;
+  days.innerText = currentDays;
+  hours.innerText = formatTime(currentHours);
+  minutes.innerText = formatTime(currentMinutes);
+  seconds.innerText = formatTime(currentSeconds);
+}
+
+setTimeout(() => {
+  loading.remove();
+  countdown.style.display = "flex";
+}, 1000);
+
+setInterval(updateCountdown, 1000);
+
+year.innerText = nextYear;
